@@ -1,0 +1,68 @@
+body, html {
+  height: 100%;
+  width: 100%;
+  position: relative;
+  font-family: 'Microsoft JhengHei';
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-flow: column;
+  background-color: #FEDFE1;
+}
+
+.post-image {
+  width: 500px;
+  
+}
+
+.content {
+  width: 100%;
+}
+
+.content-head {
+  width: 100%;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+}
+
+.content-head__img {
+  display: block; 
+  width: 200px; 
+  height: 200px; 
+}
+
+.content-head__box, .content-submit {
+  width: 100px; 
+  height: 18px;
+  text-align: center;
+  padding: 5px 0;
+  background-color: aquamarine;
+  margin-top: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.content-head__input {
+  display: none;
+}
+
+.content-list {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+}
+
+.content-item {
+  display: flex; 
+  padding: 10px 0; 
+  align-items: center;
+}
+
+.content-item__textbox {
+  height: 30px;
+}
+
+.content-submit__button {
+  display: none;
+}
