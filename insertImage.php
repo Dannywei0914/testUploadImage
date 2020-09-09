@@ -1,8 +1,8 @@
 <?php
   // Create database connection
-  $db = mysqli_connect("127.0.0.1", "zero", "1234567890-=", "test");
-
+  $db = new PDO('mysql:host=localhost;dbname=test; charset=utf8', 'zero', '1234567890-=');
   // Initialize message variable
+
   $msg = "";
 
   // If upload button is clicked ...
@@ -23,8 +23,6 @@
     } else {
       $photoName = $number. '.jpeg';
     }
-  	// Get text
-  	// $image_text = mysqli_real_escape_string($db, $_POST['image_text']);
 
   	// image file directory
   	$target = "uploads/".basename($photoName);
@@ -37,12 +35,13 @@
     $result = $db->query($sql);
 
   	if (move_uploaded_file($_FILES['image']['tmp_name'], $target)) {
-  		$msg = "Image uploaded successfully";
+      $newURL = 'http://' . $_SERVER['HTTP_HOST'] . '/WebsiteProject/test/testUploadImage/viewImage.php';
+      header('Location: '. $newURL);
+      die();
   	}else{
   		$msg = "Failed to upload image";
   	}
   }
-  $result = mysqli_query($db, "SELECT * FROM images");
 ?>
 <!DOCTYPE html>
 <html>
@@ -82,6 +81,7 @@
       <p class="">送出</p>
   	</label>
   </form>
+  <?php echo $msg?>
 </div>
 <script>
     $(function() {
