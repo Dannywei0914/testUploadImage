@@ -6,10 +6,36 @@
   <script src="./js/jquery-3.5.1.min.js"></script>
   <title>Document</title>
 </head>
+<style>
+  li {
+    display: flex;
+    height: 150px;
+    align-items: center;
+  }
+
+  p {
+    padding: 0 5px;
+    margin: 0; 
+    width: 100px;
+  }
+
+  .img {
+    height: 100px; 
+    width: 100px; 
+    margin: 0 10px;
+    display: flex;
+    align-items: center;
+  }
+
+  i {
+    width: 30px;
+    height: 30px;
+    background-color: #636363;
+  }
+</style>
 <body>
   <?php
-    $connection = new PDO('mysql:host=localhost;dbname=test; charset=utf8', 'zero', '1234567890-=');
-    $statement = $connection->query('select * from tourist_guide');
+    include('./connMySql.php');
     $all = $statement-> rowCount(); //統計筆數
     
     $per = 5; //每頁顯示數量
@@ -25,20 +51,22 @@
     $result = $connection->query('select * from tourist_guide order by tourist_guide.id DESC LIMIT ' . $start . ',' .$per);
   ?>
   <ul>
-    <li style="display: flex; align-items: center;">
-      <p style="width: 100px; margin: 0 10px">照片</p>
-      <p style="padding: 0 5px; margin: 0; width: 100px">id</p>
-      <p style="padding: 0 5px; margin: 0; width: 100px">名字</p>
-      <p style="padding: 0 5px; margin: 0; width: 100px">學號</p>
-      <p style="padding: 0 5px; margin: 0; width: 100px">電話</p>
     <li>
+      <span class="img">照片</span>
+      <p>id</p>
+      <p>名字</p>
+      <p>學號</p>
+      <p>電話</p>
+    </li>
     <?php foreach($result as $row){?>
-      <li style="display: flex; height: 150px; align-items: center;">
-        <img  id="preview" style="height: 100px; width: 100px; margin: 0 10px" src="<?php echo 'http://'.$_SERVER['HTTP_HOST'].'/WebsiteProject/test/testUploadImage/uploads/'.$row['image']?>">
-        <p style="padding: 0 5px; margin: 0; width: 100px"><?php echo $row['id']; ?></p>
-        <p style="padding: 0 5px; margin: 0; width: 100px"><?php echo $row['name']; ?></p>
-        <p style="padding: 0 5px; margin: 0; width: 100px"><?php echo $row['number']; ?></p>
-        <p style="padding: 0 5px; margin: 0; width: 100px"><?php echo $row['phone']; ?></p>
+      <li>
+        <img id="preview" class="img" src="<?php echo 'http://'.$_SERVER['HTTP_HOST'].'/WebsiteProject/test/testUploadImage/uploads/'.$row['image']?>">
+        <p><?php echo $row['id']; ?></p>
+        <p><?php echo $row['name']; ?></p>
+        <p><?php echo $row['number']; ?></p>
+        <p><?php echo $row['phone']; ?></p>
+        <?php echo "<a href='updateData.php?id=".$row['id']."'>編輯</a></td>";?>
+        <?php echo "<a href='deleteData.php?id=".$row['id']."'>刪除</a></td>";?>
       </li>
     <?php }?>
   </ul>
@@ -48,9 +76,7 @@
     echo "<br /><a href=?page=1>首頁</a> ";
     echo "第 ";
     for( $i=1 ; $i<=$pages ; $i++ ) {
-        if ( $page-3 < $i && $i < $page+3 ) {
-            echo "<a href=?page=".$i.">".$i."</a> ";
-        }
+      echo "<a href=?page=".$i.">".$i."</a> ";
     } 
     echo " 頁 <a href=?page=".$pages.">末頁</a><br /><br />";
   ?>
