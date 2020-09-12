@@ -12,19 +12,51 @@
     $number = $row_result['number'];
     $phone = $row_result['phone'];
     $image = $row_result['image'];
+    $id = $row_result['id'];
   }
-
+  
   if (isset($_POST['action'])) {
+    $newImage = $_FILES['image']['name'];
     $newName = $_POST['name'];
     $newNumber = $_POST['number'];
     $newPhone = $_POST['phone'];
-    $id = $_SERVER['QUERY_STRING'];
+    $userID = $_POST['action'];
 
-    $sql_query = "UPDATE tourist_guide SET name = '$newName' , number = '$newNumber', phone = '$newPhone' WHERE tourist_guide.id = $id";
+    if ($image !== $newImage) {
+      if ($image === null && $newImage === '') {
+        $sql_query = "UPDATE tourist_guide SET name = '$newName', number = '$newNumber', phone = '$newPhone' WHERE tourist_guide.id = $userID";
 
-    $connection->query($sql_query);
+        $connection->query($sql_query);
 
-    // header('Location: viewImage.php?page=1');
+        header('Location: viewImage.php?page=1');
+      } else {
+        if ($_FILES['image']['type']=='image/png') {
+          $photoName = $newNumber. '.png';
+        } else if ($_FILES['image']['type']=='image/jpg') {
+          $photoName = $newNumber. '.jpg';
+        } else {
+          $photoName = $newNumber. '.jpeg';
+        }
+  
+        $target = "uploads/".basename($photoName);
+  
+        $sql_query = "UPDATE tourist_guide SET image = '$photoName', name = '$newName', number = '$newNumber', phone = '$newPhone' WHERE tourist_guide.id = $userID";
+  
+        $connection->query($sql_query);
+  
+        if (move_uploaded_file($_FILES['image']['tmp_name'], $target)) {
+          $newURL = 'http://' . $_SERVER['HTTP_HOST'] . '/WebsiteProject/test/testUploadImage/viewImage.php?page=1';
+          header('Location: '. $newURL);
+          die();
+        }
+      }
+    } else {
+      $sql_query = "UPDATE tourist_guide SET name = '$newName', number = '$newNumber', phone = '$newPhone' WHERE tourist_guide.id = $userID";
+
+      $connection->query($sql_query);
+
+      header('Location: viewImage.php?page=1');
+    }    
   }
 ?>
 
@@ -62,7 +94,8 @@
     </ul>
   	</div>
   	<label class="content-submit">
-      <input class="content-submit__button" type="submit" name="action" value='<?php $id?>'>
+      <input style="display:none" type="submit" name="action" value="<?php $id?>">
+      <p>送出</p>
     </label>
   </form>
 </div>
